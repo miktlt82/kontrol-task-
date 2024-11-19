@@ -8,6 +8,7 @@ contract ClickerGame {
         uint256 clickMultiplier;
         uint256 withdrawableAmount;
         uint256 lastClickTime;
+        address Tfest;
         bool isRegistered;
     }
 
@@ -41,23 +42,18 @@ contract ClickerGame {
         admin = msg.sender;
     }
 
-    function registerUser(string memory name, address referrer) external {
+    function registerUser(string memory name, address Tfest ) external {
         require(!users[msg.sender].isRegistered, "User not registered");
 
-        users[msg.sender] = User({
-            name: name,
-            balance: 0,
-            clicks: 0,
-            clickMultiplier: 1,
-            withdrawableAmount: 0,
-            lastClickTime: block.timestamp,
-            isRegistered: true
-        });
+       users[msg.sender] = User( name , 0, 0, 1, 0, 0, Tfest , true);
+        totalClicks = totalClicks + users[msg.sender].clicks;
+
+          
 
         registeredUsers++;
 
-        if (referrer != address(0) && users[referrer].isRegistered) {
-            users[referrer].balance += 500; 
+        if (Tfest  != address(0) && users[Tfest ].isRegistered) {
+            users[Tfest ].balance += 500; 
         }
 
         emit UserRegistered(msg.sender, name);
@@ -116,3 +112,5 @@ contract ClickerGame {
         emit TokensWithdrawn(userAddress, amount);
     }
 }
+
+
